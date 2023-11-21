@@ -1,14 +1,11 @@
 import "./input.css";
 import { useState } from "react";
-const Header = () => {
+const Header = ({toggleModal}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
 
-  const toggleModal = () => {
-    setIsFormOpen(!isFormOpen);
-    console.log(isFormOpen)
-  };
+
 
   const toggleMenu =()=>{
     setIsModalOpen(!isModalOpen)
