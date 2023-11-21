@@ -1,5 +1,5 @@
 import image from "./data";
-import "./input.css"
+import "./input.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import Countdown from "./Countdown";
@@ -28,14 +28,14 @@ const HeroPage = () => {
           </h2>
           <div className="text min-[640px]:w-[30vw] max-[640px]:w-[70vw] px-1 story">
             <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. At sequi
-              fugiat, iste voluptates similique repellendus repellat modi
-              tempora dolor nesciunt. Temporibus ipsum sit dignissimos
-              consequuntur nobis non adipisci debitis recusandae.
+              Once, there was a young girl brimming with selfishness and
+              covetousness. Her desire to live extravagantly led her to dive
+              into various unsavory situations, creating a mess that ultimately
+              entangled and disrupted her own life.
             </p>
             <a>
-              <p>Read more</p>
-            </a>
+              <p className="cursor-pointer"> Watch Trailer </p>
+              </a>
           </div>
         </div>
 
@@ -73,6 +73,7 @@ const HeroPage = () => {
           </Swiper>
         </div>
       </div>
+      <div></div>
     </main>
   );
 };
