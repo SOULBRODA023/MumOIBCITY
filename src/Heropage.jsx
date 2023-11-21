@@ -39,7 +39,7 @@ const HeroPage = () => {
           </div>
         </div>
 
-        <div className="carousel w-full max-[640x]:flex justify-center">
+        <div className="carousel w-full z-0 relative max-[640x]:flex justify-center cursor-pointer ">
           <Countdown />
           <Swiper
             className="max-[640x]:flex justify-center"

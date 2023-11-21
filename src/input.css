@@ -107,6 +107,7 @@ span {
   position: absolute;
   align-items: center;
   animation: slideDown 0.5s ease-in-out;
+  left:0;
 }
 
 @media screen and (min-width: 0px) and (max-width: 720px) {
@@ -144,7 +145,7 @@ div.swiper.div.swiper-wrapper div.swiper-slide {
   justify-content: center;
 }
 .timer{
-  font-size: 3rem;
+  font-size: 2rem;
   display:flex;
   justify-content: center;
   margin-top:1.2rem;
