@@ -2,15 +2,29 @@ const express = require('express');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const app = express();
-const port = 8080;
+const port = 3000;
+const cors = require("cors")
 require('dotenv').config();
+try {
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
+} catch (error) {
+  console.error("Error starting the server:", error);
+}
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5173",
+    methods: ["GET", "POST"],
+  })
+)
 
-// Serve your React static files
+
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.post('/sendEMail', async (req, res) => {
+app.get('/sendEmail', async (req, res) => {
   const formData = req.body;
   const htmlEmail = `
     <p>Name: ${formData.name}</p>
@@ -48,6 +62,4 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+

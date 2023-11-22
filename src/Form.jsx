@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from "axios";
 const Form = ({ handleFormOpen, state, myState }) => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -21,7 +21,7 @@ const Form = ({ handleFormOpen, state, myState }) => {
     try {
       // Make a POST request to your backend endpoint
       const response = await axios.post(
-        "http://localhost:8080/sendEMail",
+        "http://127.0.0.1:8080/sendEmail",
         formData
       );
 
