@@ -2,16 +2,12 @@ const express = require('express');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const app = express();
-const cors = require('cors')
 const port = 8080;
 require('dotenv').config();
 
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:5173', credentials:true }));
-app.use(express.static(path.join(__dirname, 'build')));
-app.options('/sendEMail', cors());
 
-
+// Serve your React static files
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.post('/sendEMail', async (req, res) => {
@@ -47,7 +43,7 @@ app.post('/sendEMail', async (req, res) => {
   }
 });
 
-
+// Catch-all route to serve React app
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from 'axios'
-const Form = ({handleFormOpen, state, myState}) => {
+
+const Form = ({ handleFormOpen, state, myState }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -13,39 +13,30 @@ const Form = ({handleFormOpen, state, myState}) => {
       [e.target.name]: e.target.value,
     });
   };
-  const onSubmit = async (e)=>{
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
-       myState(false);
-              
-      
+    console.log(formData);
+    myState(false);
 
-          try {
-            
-            const response = await axios.post(
-              "http://localhost:8080/sendEMail",
-              formData
-            );
+    try {
+      // Make a POST request to your backend endpoint
+      const response = await axios.post(
+        "http://localhost:8080/sendEMail",
+        formData
+      );
 
-            console.log(response.data);
-            alert("Form submitted successfully. Check your mail for details.");
-          } catch (error) {
-            console.error(
-              "Error submitting the form. Please try again.",
-              error
-            );
-            alert("Error submitting the form. Please try again.");
-          }
-        };
+      // Handle the response as needed
+      console.log(response.data);
+      alert("Form submitted successfully. Check your mail for details.");
+    } catch (error) {
+      console.error("Error submitting the form. Please try again.", error);
+      alert("Error submitting the form. Please try again.");
+    }
+  };
 
-
-
-  
-  
-  const handleClose = ()=>{
-    myState(false)
-  }
-
+  const handleClose = () => {
+    myState(false);
+  };
 
   return (
     <div
