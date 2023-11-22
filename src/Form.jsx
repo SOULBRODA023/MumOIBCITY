@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from 'axios'
 const Form = ({handleFormOpen, state, myState}) => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -13,11 +13,34 @@ const Form = ({handleFormOpen, state, myState}) => {
       [e.target.name]: e.target.value,
     });
   };
-  const onSubmit =  (e)=>{
+  const onSubmit = async (e)=>{
     e.preventDefault();
     console.log(formData)
        myState(false);
-  }
+              
+      
+
+          try {
+            
+            const response = await axios.post(
+              "http://localhost:8080/sendEMail",
+              formData
+            );
+
+            console.log(response.data);
+            alert("Form submitted successfully. Check your mail for details.");
+          } catch (error) {
+            console.error(
+              "Error submitting the form. Please try again.",
+              error
+            );
+            alert("Error submitting the form. Please try again.");
+          }
+        };
+
+
+
+  
   
   const handleClose = ()=>{
     myState(false)
