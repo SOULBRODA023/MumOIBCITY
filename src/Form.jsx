@@ -21,7 +21,7 @@ const Form = ({ handleFormOpen, state, myState }) => {
     try {
       // Make a POST request to your backend endpoint
       const response = await axios.post(
-        "http://127.0.0.1:8080/sendEmail",
+        "http://127.0.0.1:3000/sendEmail",
         formData
       );
 

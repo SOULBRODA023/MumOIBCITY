@@ -16,15 +16,15 @@ try {
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://127.0.0.1:5173",
+    origin: ["http://127.0.0.1:5173", "http://localhost:5173"],
     methods: ["GET", "POST"],
   })
-)
+);
 
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/sendEmail', async (req, res) => {
+app.post('/sendEmail', async (req, res) => {
   const formData = req.body;
   const htmlEmail = `
     <p>Name: ${formData.name}</p>
@@ -34,11 +34,24 @@ app.get('/sendEmail', async (req, res) => {
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
+      type:'OAuth2',
       user: process.env.GMAIL_USER,
-      password: process.env.GMAIL_PASSWORD,
+      pass: process.env.GMAIL_PASSWORD,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      refreshToken:process.env.REFRESH_TOKEN, 
+      accessToken: process.env.ACCESS_TOKEN,
+  
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
+
 
   const mailOptions = {
     from: process.env.GMAIL_USER,
@@ -46,6 +59,7 @@ app.get('/sendEmail', async (req, res) => {
     subject: "MUMMY OF IBCITY",
     html: htmlEmail,
   };
+
 
   try {
     const info = await transporter.sendMail(mailOptions);
