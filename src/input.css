@@ -49,7 +49,7 @@ span {
   border-top: 3px solid #eb500d;
 }
 button,
-button[type="submit"] {
+button[type="submit" ] {
   background-color: #045dc6;
   padding: 0.6rem;
 }

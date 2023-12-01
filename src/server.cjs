@@ -27,25 +27,197 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.post('/sendEmail', async (req, res) => {
   const formData = req.body;
   const htmlEmail = `
-    <p>Name: ${formData.name}</p>
-    <p>Email: ${formData.email}</p>
-    <p>Message: ${formData.message}</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <title>Dieko's Card</title>
+    <style>
+      *,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  background-color: #201e29;
+  color: #f3f3f3;
+  position: relative;
+}
+
+.card__container {
+  width: 95%;
+  max-width: 390px;
+  margin: auto;
+  height: auto;
+  background-color: #e42a1d;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+.card__container::after {
+  content: "";
+  position: absolute;
+  top: -0.1rem;
+  right: 7.5rem;
+  width: 1.35rem;
+  height: 0.7rem;
+  border-radius: 0 0 1rem 1rem;
+  background-color: #201e29;
+}
+
+.card__container::before {
+  content: "";
+  position: absolute;
+  top: -0.1rem;
+  right: 3rem;
+  width: 1.35rem;
+  height: 0.7rem;
+  border-radius: 0 0 1rem 1rem;
+  background-color: #201e29;
+}
+
+.card__header {
+  width: 100%;
+  padding-inline: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 3rem;
+}
+
+.card__header .share-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.card__body {
+  background-color: #201e29;
+  border-radius: 0.25rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1rem 0.5rem;
+  gap: 1rem;
+}
+.card__body .card__image {
+  width: 100%;
+  flex-basis: 50%;
+  height: 10rem;
+  background: url(/image/movie-day.webp);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 0.15rem;
+}
+
+.card__body .card__info {
+  height: 10rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-block: 1rem;
+}
+
+.card__info h1 {
+  font-size: 1.5rem;
+  letter-spacing: 0.1rem;
+  display: block;
+}
+
+
+
+.card__info span{
+    font-size: 0.9rem;
+}
+
+.card__info .time, .card__info .date, .card__info .name {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* gap: 3rem; */
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="card__container">
+      <div class="card__header">
+        <span class="amount"><b>
+              Free
+        </b></span>
+        <span class="share-button">
+          <svg
+            width="64"
+            height="64"
+            viewBox="0 0 256 256"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#ffffff"
+              d="m229.66 109.66l-48 48a8 8 0 0 1-11.32-11.32L204.69 112H165a88 88 0 0 0-85.23 66a8 8 0 0 1-15.5-4A103.94 103.94 0 0 1 165 96h39.71l-34.37-34.34a8 8 0 0 1 11.32-11.32l48 48a8 8 0 0 1 0 11.32ZM192 208H40V88a8 8 0 0 0-16 0v120a16 16 0 0 0 16 16h152a8 8 0 0 0 0-16Z"
+            />
+          </svg>
+        </span>
+      </div>
+      <div class="card__body">
+        <div class="card__image"></div>
+        <div class="card__info">
+          <h1>MOIBCITY</h1>
+          <div class="name">
+            <span>Name</span>
+            <span>{formData.firstname}</span>
+          </div>
+          <div class="date">
+            <span>Date</span>
+            <span>12.07.23</span>
+          </div>
+          <div class="time">
+            <span>Time</span>
+            <span>11:00 AM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+ 
   `;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,
     auth: {
-      type:'OAuth2',
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASSWORD,
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      refreshToken:process.env.REFRESH_TOKEN, 
-      accessToken: process.env.ACCESS_TOKEN,
-  
+      type: 'OAuth2',
+      user: `ogundeyi.dieko13@gmail.com`,
+      pass: `iqqzsuxqbekytyaq`,
+      clientId: '814019731434-hsie7b8vol2nvkg25euapu8jqii1o577.apps.googleusercontent.com',
+      refreshToken: '1//04MavWzYTcDF5CgYIARAAGAQSNwF-L9IrYXCKlzjQj8-ne0Os_ZwTAxlIL2peN54TDj87dOU9Bn9IRiKvyeJecoMbVSuUkazPBWk',
+      clientSecret: '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',
+      accessToken: `ya29.a0AfB_byBblq4sMyAdQzrb8dL6v5uunkTP1klWj5y2SCFoVOF8vOWcXdShr0ZTc2vL5iD3UjYaM8CEO9wsqNB9xLZgRLGTSjPHe7VYR_7xfWvjXEoo5KnC8y_p4POlD_G8eEB9`,
     },
     tls: {
       rejectUnauthorized: false,
@@ -54,8 +226,8 @@ app.post('/sendEmail', async (req, res) => {
 
 
   const mailOptions = {
-    from: process.env.GMAIL_USER,
-    to: formData.email,
+    from: 'ogundeyi.dieko13@gmail.com',
+    to: `azimyusuf111@gmail.com`,
     subject: "MUMMY OF IBCITY",
     html: htmlEmail,
   };
