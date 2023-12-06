@@ -19,30 +19,40 @@ const Form = ({ handleFormOpen, state, myState }) => {
     myState(false);
 
     try {
-      // Make a POST request to your backend endpoint
-      const response = await axios.post(
-        "http://127.0.0.1:3000/sendEmail",
-        formData
-      );
+      const response = await fetch("http://127.0.0.1:3000/sendEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      // Handle the response as needed
-      console.log(response.data);
-      alert("Form submitted successfully. Check your mail for details.");
+      if (response.ok) {
+        const responseData = await response.text();
+        console.log(responseData);
+        alert("Form submitted successfully. Check your mail for details.");
+      } else {
+        console.error(`HTTP error! Status: ${response.status}`);
+        alert("Error submitting the form. Please try again.");
+      }
     } catch (error) {
-      console.error("Error submitting the form. Please try again.", error);
+      console.error(error);
       alert("Error submitting the form. Please try again.");
     }
   };
+
+
 
   const handleClose = () => {
     myState(false);
   };
 
   return (
-    <div
-      className={`bg-opacity-70 bg-black p-4 rounded-md w-64 mx-auto shadow-md text-white absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/3 z-1 
-      ${state ? "block" : "close"}`}
-    >
+  <div
+  className={`bg-opacity-70 bg-black p-4 rounded-md w-64 mx-auto shadow-md text-white absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-1/3 z-1 
+  ${state ? "block" : "close"}`}
+>
+
       <img
         src="icon-close.svg"
         alt=""

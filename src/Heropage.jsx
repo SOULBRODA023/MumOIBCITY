@@ -1,3 +1,4 @@
+import React from "react";
 import image from "./data";
 import "./input.css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,6 +8,11 @@ import "swiper/css";
 import "swiper/css/bundle";
 
 const HeroPage = () => {
+  const openTrailer = () => {
+    const youtubeUrl = `https://youtu.be/pCMSbPoz9xQ?si=W7rRZAKNJcjFuKfu`;
+    window.open(youtubeUrl, "_blank");
+  };
+
   return (
     <main>
       <div className="heropage max-[640px]:flex justify-center flex-col">
@@ -34,12 +40,14 @@ const HeroPage = () => {
               entangled and disrupted her own life.
             </p>
             <a>
-              <p className="cursor-pointer"> Watch Trailer </p>
-              </a>
+              <p className="cursor-pointer" onClick={openTrailer}>
+                Watch Trailer
+              </p>
+            </a>
           </div>
         </div>
 
-        <div className="carousel w-full z-0 relative max-[640x]:flex justify-center cursor-pointer ">
+        <div className="carousel w-full z-0 relative max-[640x]:flex justify-center cursor-pointer">
           <Countdown />
           <Swiper
             className="max-[640x]:flex justify-center"
@@ -73,7 +81,6 @@ const HeroPage = () => {
           </Swiper>
         </div>
       </div>
-      <div></div>
     </main>
   );
 };

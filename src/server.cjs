@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const app = express();
+const ejs = require('ejs');
 const port = 3000;
 const cors = require("cors")
 require('dotenv').config();
@@ -12,21 +13,24 @@ try {
 } catch (error) {
   console.error("Error starting the server:", error);
 }
-
+app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(
   cors({
     origin: ["http://127.0.0.1:5173", "http://localhost:5173"],
     methods: ["GET", "POST"],
+    optionsSuccessStatus: 204,
   })
 );
+app.options('/sendEmail', cors());
 
 
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.post('/sendEmail', async (req, res) => {
   const formData = req.body;
-  const htmlEmail = `
+  const nameValue = formData.firstName;
+  const template = `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -61,7 +65,6 @@ body {
 
 .card__container {
   width: 95%;
-  max-width: 390px;
   margin: auto;
   height: auto;
   background-color: #e42a1d;
@@ -116,47 +119,56 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
   padding: 1rem 0.5rem;
-  gap: 1rem;
+  gap: 2rem;
+}
+img{
+    object-fit: contain;
+    display:block;
+    max-width:100%;
+  border-radius:0.5rem;
+   height:10rem;
 }
 .card__body .card__image {
-  width: 100%;
-  flex-basis: 50%;
-  height: 10rem;
-  background: url(/image/movie-day.webp);
+  width: 50%;
+ 
+  height: 0;
+  padding-bottom: 50%; 
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 0.15rem;
+
 }
 
-.card__body .card__info {
+
+.card__info {
   height: 10rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  gap:0.5rem;
+  grid-template-rows: repeat(4, 1fr);
   padding-block: 1rem;
+  width: 50%;
+  align-content: center;
 }
 
 .card__info h1 {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   letter-spacing: 0.1rem;
   display: block;
 }
 
-
-
-.card__info span{
-    font-size: 0.9rem;
+.card__info span {
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
 }
 
-.card__info .time, .card__info .date, .card__info .name {
+.card__info .time,
+.card__info .date,
+.card__info .name {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* gap: 3rem; */
+  gap:0.5rem;
 }
+
 
     </style>
   </head>
@@ -181,20 +193,22 @@ body {
         </span>
       </div>
       <div class="card__body">
-        <div class="card__image"></div>
+        <div class="card__image">
+        <img src="cid:unique-image-id" alt="image"/>
+        </div>
         <div class="card__info">
           <h1>MOIBCITY</h1>
           <div class="name">
-            <span>Name</span>
-            <span>{formData.firstname}</span>
+            <span>Name:</span>
+            <span><b><%= nameValue %></b></span>
           </div>
           <div class="date">
-            <span>Date</span>
-            <span>12.07.23</span>
+            <span>Date:</span>
+            <span><b>12.07.23</b></span>
           </div>
           <div class="time">
-            <span>Time</span>
-            <span>11:00 AM</span>
+            <span>Time:</span>
+            <span><b>11:00 AM</b></span>
           </div>
         </div>
       </div>
@@ -204,6 +218,10 @@ body {
 
  
   `;
+  const compiledTemplate = ejs.compile(template);
+
+  // Render the HTML with the provided data
+  const htmlEmail = compiledTemplate({ nameValue });
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -211,13 +229,10 @@ body {
     port: 587,
     secure: false,
     auth: {
-      type: 'OAuth2',
+      // // //   type: 'OAuth2',
       user: `ogundeyi.dieko13@gmail.com`,
       pass: `iqqzsuxqbekytyaq`,
-      clientId: '814019731434-hsie7b8vol2nvkg25euapu8jqii1o577.apps.googleusercontent.com',
-      refreshToken: '1//04MavWzYTcDF5CgYIARAAGAQSNwF-L9IrYXCKlzjQj8-ne0Os_ZwTAxlIL2peN54TDj87dOU9Bn9IRiKvyeJecoMbVSuUkazPBWk',
-      clientSecret: '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',
-      accessToken: `ya29.a0AfB_byBblq4sMyAdQzrb8dL6v5uunkTP1klWj5y2SCFoVOF8vOWcXdShr0ZTc2vL5iD3UjYaM8CEO9wsqNB9xLZgRLGTSjPHe7VYR_7xfWvjXEoo5KnC8y_p4POlD_G8eEB9`,
+
     },
     tls: {
       rejectUnauthorized: false,
@@ -230,6 +245,13 @@ body {
     to: `azimyusuf111@gmail.com`,
     subject: "MUMMY OF IBCITY",
     html: htmlEmail,
+    attachments: [
+      {
+        filename: 'image.jpg', // Name to be used for the attachment
+        path: path.join(__dirname, 'image.jpg'),
+        cid: 'unique-image-id' // Unique identifier for the image in the HTML
+      }
+    ],
   };
 
 
